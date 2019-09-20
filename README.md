@@ -1,6 +1,4 @@
 # AndroidMyMVVMDemo
-
-# android-base-MVVM-library
 使用databinding livedata双向绑定的MVVM模式的通用开发库
 
 ## 引入依赖：
