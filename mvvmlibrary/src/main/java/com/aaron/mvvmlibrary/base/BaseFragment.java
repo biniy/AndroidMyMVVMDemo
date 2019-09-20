@@ -13,8 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.aaron.mvvmlibrary.utils.MaterialDialogUtils;
-import com.afollestad.materialdialogs.MaterialDialog;
+import com.aaron.mvvmlibrary.nicedialog.NiceDialog;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -24,7 +23,7 @@ public abstract class BaseFragment<V extends ViewDataBinding, VM extends BaseVie
     protected V binding;
     protected VM viewModel;
     private int viewModelId;
-    private MaterialDialog dialog;
+    private NiceDialog dialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,6 +56,8 @@ public abstract class BaseFragment<V extends ViewDataBinding, VM extends BaseVie
         super.onViewCreated(view, savedInstanceState);
         //私有的初始化Databinding和ViewModel方法
         initViewDataBinding();
+        //私有的ViewModel与View的契约事件回调逻辑
+        registorUIChangeLiveDataCallBack();
         //页面数据初始化方法
         initData();
         //页面事件监听的方法，一般用于ViewModel层转到View层的事件注册
@@ -83,19 +84,36 @@ public abstract class BaseFragment<V extends ViewDataBinding, VM extends BaseVie
         binding.setVariable(viewModelId, viewModel);
     }
 
+    //注册ViewModel与View的契约UI回调事件
+    protected void registorUIChangeLiveDataCallBack() {
+        //加载对话框显示
+        viewModel.getShowDialogEvent().observe(this, title -> showDialog(title));
+        //加载对话框消失
+        viewModel.getDismissDialogEvent().observe(this, v -> dismissDialog());
+        //跳入新页面
+        viewModel.getStartActivityEvent().observe(this, params -> {
+            Class<?> clz = (Class<?>) params.get(BaseViewModel.ParameterField.CLASS);
+            Bundle bundle = (Bundle) params.get(BaseViewModel.ParameterField.BUNDLE);
+            startActivity(clz, bundle);
+        });
+        //跳入ContainerActivity
+        viewModel.getStartContainerActivityEvent().observe(this, params -> {
+            String canonicalName = (String) params.get(BaseViewModel.ParameterField.CANONICAL_NAME);
+            Bundle bundle = (Bundle) params.get(BaseViewModel.ParameterField.BUNDLE);
+            startContainerActivity(canonicalName, bundle);
+        });
+        //关闭界面
+        viewModel.getFinishEvent().observe(this, v -> getActivity().finish());
+        //关闭上一层
+        viewModel.getOnBackPressedEvent().observe(this, v -> getActivity().onBackPressed());
+    }
 
     public void showDialog(String title) {
-        if (dialog != null) {
-            dialog = dialog.getBuilder().title(title).build();
-            dialog.show();
-        } else {
-            MaterialDialog.Builder builder = MaterialDialogUtils.showIndeterminateProgressDialog(getActivity(), title, true);
-            dialog = builder.show();
-        }
+        dialog = NiceDialog.createProgressDialog(getActivity().getSupportFragmentManager(), title);
     }
 
     public void dismissDialog() {
-        if (dialog != null && dialog.isShowing()) {
+        if (dialog != null) {
             dialog.dismiss();
         }
     }

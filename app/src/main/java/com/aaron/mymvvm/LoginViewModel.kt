@@ -55,6 +55,8 @@ class LoginViewModel(application: Application) :
             ToastUtils.showShort("请输入密码！")
             return@BindingAction
         }
-        startActivity(MainActivity::class.java)
+        showDialog("正在加载中...")
+
+//        startActivity(MainActivity::class.java)
     })
 }

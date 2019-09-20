@@ -1,0 +1,68 @@
+﻿使用方法：
+NiceDialog.init()
+                .setLayoutId(R.layout.ad_layout)
+                .setConvertListener(new ViewConvertListener() {
+                    @Override
+                    public void convertView(ViewHolder holder, final NiceDialog dialog) {
+                        holder.setOnClickListener(R.id.close, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                            }
+                        });
+                    }
+                })
+                .setWidth(210)
+                .setOutCancel(false)
+                .setAnimStyle(R.style.EnterExitAnimation)
+                .show(getSupportFragmentManager());
+
+
+NiceDialog.init()
+                .setLayoutId(R.layout.confirm_layout)
+                .setDimAmount(0)
+                .setMargin(60)
+                .setOutCancel(false)
+                .setConvertListener(new ViewConvertListener() {
+                    @Override
+                    public void convertView(ViewHolder holder, final NiceDialog dialog) {
+                        holder.setText(R.id.title, "提示");
+                        holder.setText(R.id.message, "简单提示框");
+                        holder.setOnClickListener(R.id.cancel, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                            }
+                        });
+
+                        holder.setOnClickListener(R.id.ok, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                            }
+                        });
+                    }
+                })
+                .show(getSupportFragmentManager());
+
+几个内置的默认实现：
+dialog = NiceDialog.createProgressDialog(getSupportFragmentManager(), title);
+dialog = NiceDialog.createDialogWithConfirmButton(getSupportFragmentManager()
+        , title, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+dialog = NiceDialog.createDialogWithAllFunction(getSupportFragmentManager()
+        , title, "34343", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ToastUtils.showShort("点击了取消");
+            }
+        }, new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ToastUtils.showShort("点击了ok");
+            }
+        });

@@ -66,13 +66,10 @@ dependencies {
     // 采用Gson解析
     implementation 'com.google.code.gson:gson:2.8.5'
     // 图片加载
-    implementation 'com.github.bumptech.glide:glide:4.9.0'
+    implementation 'com.github.bumptech.glide:glide:4.10.0'
     // rx实现的工具
     implementation 'com.jakewharton.rxbinding3:rxbinding:3.0.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
-    // material-dialogs
-    implementation 'com.afollestad.material-dialogs:core:0.9.4.5'
-    implementation 'com.afollestad.material-dialogs:commons:0.9.4.5'
 }
 
 /** 以下开始是将Android Library上传到jcenter的相关配置
@@ -92,7 +89,7 @@ publish{
     repoName = 'android-library'//远程仓库名字,不指明，默认是上传到maven
     groupId = 'com.aaron'//jcenter上的路径
     artifactId = 'AndroidBaseMVVMLibrary'//项目名称
-    publishVersion = '1.0.0'//版本号
+    publishVersion = '1.0.3'//版本号
     desc = 'For android MVVM base library'//描述，不重要
     website = siteUrl//项目主页
 }

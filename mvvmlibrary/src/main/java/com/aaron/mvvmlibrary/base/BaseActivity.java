@@ -2,18 +2,14 @@ package com.aaron.mvvmlibrary.base;
 
 import android.content.Intent;
 import android.os.Bundle;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProviders;
-
 import com.aaron.mvvmlibrary.bus.Messenger;
-import com.aaron.mvvmlibrary.utils.MaterialDialogUtils;
-import com.afollestad.materialdialogs.MaterialDialog;
-
+import com.aaron.mvvmlibrary.nicedialog.NiceDialog;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
@@ -29,7 +25,7 @@ public abstract class BaseActivity<V extends ViewDataBinding, VM extends BaseVie
     protected V binding;
     protected VM viewModel;
     private int viewModelId;
-    private MaterialDialog dialog;
+    private NiceDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,18 +69,30 @@ public abstract class BaseActivity<V extends ViewDataBinding, VM extends BaseVie
     }
 
     public void showDialog(String title) {
-        if (dialog != null) {
-            dialog = dialog.getBuilder().title(title).build();
-            dialog.show();
-        } else {
-            MaterialDialog.Builder builder = MaterialDialogUtils
-                    .showIndeterminateProgressDialog(this, title, true);
-            dialog = builder.show();
-        }
+        dialog = NiceDialog.createProgressDialog(getSupportFragmentManager(), title);
+//        dialog = NiceDialog.createDialogWithConfirmButton(getSupportFragmentManager()
+//                , title, new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        dialog.dismiss();
+//                    }
+//                });
+//        dialog = NiceDialog.createDialogWithAllFunction(getSupportFragmentManager()
+//                , title, "34343", new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        ToastUtils.showShort("点击了取消");
+//                    }
+//                }, new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        ToastUtils.showShort("点击了ok");
+//                    }
+//                });
     }
 
     public void dismissDialog() {
-        if (dialog != null && dialog.isShowing()) {
+        if (dialog != null) {
             dialog.dismiss();
         }
     }
