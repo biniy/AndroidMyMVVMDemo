@@ -1,0 +1,104 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 28
+    buildToolsVersion "29.0.2"
+
+    dataBinding {
+        enabled true
+    }
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+
+    buildTypes {
+        debug {
+            buildConfigField "boolean", "LOG_DEBUG", "true"
+            versionNameSuffix '_Debug'
+            // Zipalign优化
+            zipAlignEnabled false
+            // 混淆
+            minifyEnabled false
+            // proguard-android.txt 默认不优化，而proguard-android-optimize.txt是优化的
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        release {
+            buildConfigField "boolean", "LOG_DEBUG", "false"
+            versionNameSuffix '_Release'
+            // Zipalign优化
+            zipAlignEnabled true
+            // 混淆
+            minifyEnabled true
+            // proguard-android.txt 默认不优化，而proguard-android-optimize.txt是优化的
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    // 测试
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    // retrofit2
+    implementation 'com.squareup.retrofit2:retrofit:2.6.1'
+    implementation 'com.squareup.retrofit2:converter-gson:2.6.1'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.6.1'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.2.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.2.0'
+    // Rxjava rxandroid
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.10'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    // 采用Gson解析
+    implementation 'com.google.code.gson:gson:2.8.5'
+    // 图片加载
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
+    // rx实现的工具
+    implementation 'com.jakewharton.rxbinding3:rxbinding:3.0.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
+    // material-dialogs
+    implementation 'com.afollestad.material-dialogs:core:0.9.4.5'
+    implementation 'com.afollestad.material-dialogs:commons:0.9.4.5'
+}
+
+/** 以下开始是将Android Library上传到jcenter的相关配置
+ *
+ * compile'com.aaron:AndroidBaseMVVMLibrary:1.0.0'
+ *
+ * GROUP_ID是com.aaron
+ * ARTIFACT_ID是AndroidBaseMVVMLibrary
+ * VERSION是1.0.0
+ *
+ **/
+apply plugin: 'com.novoda.bintray-release'// 在apply plugin: 'com.android.library'之后
+//项目主页
+def siteUrl = 'https://github.com/StarsAaron/AndroidBaseMVVMLibrary'
+publish{
+    userOrg = 'aaronstars'//bintray.com的用户名
+    repoName = 'android-library'//远程仓库名字,不指明，默认是上传到maven
+    groupId = 'com.aaron'//jcenter上的路径
+    artifactId = 'AndroidBaseMVVMLibrary'//项目名称
+    publishVersion = '1.0.0'//版本号
+    desc = 'For android MVVM base library'//描述，不重要
+    website = siteUrl//项目主页
+}
+//防止编码问题
+tasks.withType(Javadoc) {
+    options.addStringOption('Xdoclint:none', '-quiet')
+    options.addStringOption('encoding', 'UTF-8')
+    options.addStringOption('charSet', 'UTF-8')
+}

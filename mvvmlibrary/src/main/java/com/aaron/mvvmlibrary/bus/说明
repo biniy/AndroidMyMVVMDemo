@@ -1,0 +1,77 @@
+############## Rxbus 使用 ########################
+
+Disposable mSubscription = RxBus.getDefault().toObservable(DownLoadStateBean.class)
+        .observeOn(AndroidSchedulers.mainThread()) //回调到主线程更新UI
+        .subscribe(new Consumer<DownLoadStateBean>() {
+            @Override
+            public void accept(final DownLoadStateBean progressLoadBean) throws Exception {
+                progress(progressLoadBean.getBytesLoaded(), progressLoadBean.getTotal());
+            }
+        });
+//将订阅者加入管理站
+RxSubscriptions.add(mSubscription);
+
+// 取消订阅
+RxSubscriptions.remove(mSubscription);
+
+RxBus.getDefault().post(new DownLoadStateBean(contentLength(), bytesReaded, tag));
+
+################ Messenger 使用 #########################
+Messenger是一个轻量级全局的消息通信工具，在我们的复杂业务中，难免会出现一些交叉的业务，比如
+ViewModel与ViewModel之间需要有数据交换，这时候可以轻松地使用Messenger发送一个实体或一个空消息，
+将事件从一个ViewModel回调到另一个ViewModel中。
+
+使用方法：
+定义一个静态String类型的字符串token
+public static final String TOKEN_LOGINVIEWMODEL_REFRESH = "token_loginviewmodel_refresh";
+
+在ViewModel中注册消息监听
+
+//注册一个空消息监听
+//参数1：接受人（上下文）
+//参数2：定义的token
+//参数3：执行的回调监听
+Messenger.getDefault().register(
+this
+, LoginViewModel.TOKEN_LOGINVIEWMODEL_REFRESH
+, new BindingAction() {
+    @Override
+    public void call() {
+
+    }
+});
+
+//注册一个带数据回调的消息监听
+//参数1：接受人（上下文）
+//参数2：定义的token
+//参数3：实体的泛型约束
+//参数4：执行的回调监听
+Messenger.getDefault().register(
+this
+, LoginViewModel.TOKEN_LOGINVIEWMODEL_REFRESH
+, String.class, new BindingConsumer<String>() {
+    @Override
+    public void call(String s) {
+
+    }
+});
+
+在需要回调的地方使用token发送消息
+
+//发送一个空消息
+//参数1：定义的token
+Messenger.getDefault().sendNoMsg(LoginViewModel.TOKEN_LOGINVIEWMODEL_REFRESH);
+
+//发送一个带数据回调消息
+//参数1：回调的实体
+//参数2：定义的token
+Messenger.getDefault().send("refresh",LoginViewModel.TOKEN_LOGINVIEWMODEL_REFRESH);
+
+token最好不要重名，不然可能就会出现逻辑上的bug，为了更好的维护和清晰逻辑，建议以aa_bb_cc的格式
+来定义token。aa：TOKEN，bb：ViewModel的类名，cc：动作名（功能名）。
+为了避免大量使用Messenger，建议只在ViewModel与ViewModel之间使用，View与ViewModel之间采用
+ObservableField去监听UI上的逻辑，可在继承了Base的Activity或Fragment中重写initViewObservable()方
+法来初始化UI的监听
+注册了监听，当然也要解除它。在BaseActivity、BaseFragment的onDestroy()方法里已经调用
+Messenger.getDefault().unregister(viewModel);
+解除注册，所以不用担心忘记解除导致的逻辑错误和内存泄漏。

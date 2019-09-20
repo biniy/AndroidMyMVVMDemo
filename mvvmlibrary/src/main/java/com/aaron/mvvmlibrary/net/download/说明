@@ -1,0 +1,45 @@
+文件下载管理，封装一行代码实现下载
+注意：带下载进度回调，进度回调运行在主线程，输出在io进程
+进度信息是使用自定义RxBus进行传递的
+
+使用方式：
+String loadUrl = "你的文件下载路径";
+String destFileDir = context.getCacheDir().getPath();  //文件存放的路径
+String destFileName = System.currentTimeMillis() + ".apk";//文件存放的名称
+DownLoadManager.getInstance().load(loadUrl, new ProgressCallBack<ResponseBody>(destFileDir, destFileName) {
+    @Override
+    public void onStart() {
+        //RxJava的onStart()
+    }
+
+    @Override
+    public void onCompleted() {
+        //RxJava的onCompleted()
+    }
+
+    @Override
+    public void onSuccess(ResponseBody responseBody) {
+        //下载成功的回调
+    }
+
+    @Override
+    public void progress(final long progress, final long total) {
+        //下载中的回调 progress：当前进度 ，total：文件总大小
+    }
+
+    @Override
+    public void onError(Throwable e) {
+        //下载错误回调
+    }
+});
+
+原理：
+load("下载地址",ProgressCallBack回调)方法的作用：
+构建请求连接，设置监听器DownLoadSubscriber，实际回调的是ProgressCallBack里面的方法，ProgressCallBack中
+订阅DownLoadStateBean信息
+
+ProgressInterceptor 拦截响应，使用ProgressResponseBody类处理响应，并使用RxBus发送进度信息DownLoadStateBean
+
+ProgressResponseBody（ProgressInterceptor中）发布者   ------>DownLoadStateBean ---->   ProgressCallBack订阅者
+
+

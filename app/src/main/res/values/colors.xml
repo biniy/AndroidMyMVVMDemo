@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#E6343A</color>
+    <color name="colorPrimaryDark">#A52024</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="colorBottomBar">#26252A</color>
+<!-- 登录页面字体-->
+    <color name="textColor">#202020</color>
+    <color name="textColorHint">#A0A0A0</color>
+    <color name="textColorVice">#6C6C6C</color>
+    <color name="viewLineColor">#F0F0F0</color>
+<!--买入页面颜色-->
+    <color name="colorAddSubBar">#FFFFFF</color>
+    <color name="colorLine">#F5E6E6E6</color>
+<!--卖出页面颜色-->
+    <color name="colorSellTheme">#4683FC</color>
+    <color name="colorSellThemeDark">#3E54CF</color>
+    <color name="bottom_bar_default_color">#EEEEEE</color>
+    <color name="colorRevokePageBg">#EFEFEF</color>
+<!--    设置页面-->
+    <color name="colorRevokePageItemClickBg">#C4FF9494</color>
+    <color name="colorPositionBg">#EFFF6C6C</color>
+</resources>
