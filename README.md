@@ -2,7 +2,13 @@
 使用databinding livedata双向绑定的MVVM模式的通用开发库
 
 ## 引入依赖：
-compile 'com.aaron:android-base-MVVM-library:1.0.0'
+`${latest.version}` is [![Download](https://api.bintray.com/packages/hotchemi/org.permissionsdispatcher/permissionsdispatcher/images/download.svg) ](https://dl.bintray.com/aaronstars/android-library/AndroidBaseMVVMLibrary/_latestVersion)
+
+```groovy
+dependencies {
+  implementation 'com.aaron:android-base-MVVM-library:${latest.version}'
+}
+```
 
 ## 功能列表
 - base包    --- activity，fragment，application等基础类，提供日志，生命周期，常用工具，databinding双向绑定的支持
