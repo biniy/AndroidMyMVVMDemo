@@ -2,7 +2,7 @@
 使用databinding livedata双向绑定的MVVM模式的通用开发库
 
 ## 引入依赖：
-`${latest.version}` is [![Download](https://api.bintray.com/packages/hotchemi/org.permissionsdispatcher/permissionsdispatcher/images/download.svg) ](https://dl.bintray.com/aaronstars/android-library/AndroidBaseMVVMLibrary/_latestVersion)
+`${latest.version}` is [![Download]](https://bintray.com/beta/#/aaronstars/android-library/RetrofitRxJaveLibrary/_latestVersion)
 
 ```groovy
 dependencies {
@@ -21,7 +21,7 @@ dependencies {
 ## 自定义BaseApplication子类
 ### 例子：
 
-'''java
+```java
 public class AppApplication extends BaseApplication {
     @Override
     public void onCreate() {
@@ -51,11 +51,11 @@ public class AppApplication extends BaseApplication {
                 .apply();
     }
 }
-'''
+```
 
 ## Rxbus 使用
 
-'''java
+```java
 Disposable mSubscription = RxBus.getDefault().toObservable(DownLoadStateBean.class)
         .observeOn(AndroidSchedulers.mainThread()) //回调到主线程更新UI
         .subscribe(new Consumer<DownLoadStateBean>() {
@@ -71,7 +71,7 @@ RxSubscriptions.add(mSubscription);
 RxSubscriptions.remove(mSubscription);
 
 RxBus.getDefault().post(new DownLoadStateBean(contentLength(), bytesReaded, tag));
-'''
+```
 
 ## Messenger 使用
 
@@ -81,7 +81,7 @@ ViewModel与ViewModel之间需要有数据交换，这时候可以轻松地使�
 
 ### 使用方法：
 定义一个静态String类型的字符串token
-'''java
+```java
 public static final String TOKEN_LOGINVIEWMODEL_REFRESH = "token_loginviewmodel_refresh";
 
 在ViewModel中注册消息监听
@@ -125,7 +125,7 @@ Messenger.getDefault().sendNoMsg(LoginViewModel.TOKEN_LOGINVIEWMODEL_REFRESH);
 //参数1：回调的实体
 //参数2：定义的token
 Messenger.getDefault().send("refresh",LoginViewModel.TOKEN_LOGINVIEWMODEL_REFRESH);
-'''
+```
 
 token最好不要重名，不然可能就会出现逻辑上的bug，为了更好的维护和清晰逻辑，建议以aa_bb_cc的格式来定义token。aa：TOKEN，bb：ViewModel的类名，cc：动作名（功能名）。
 为了避免大量使用Messenger，建议只在ViewModel与ViewModel之间使用，View与ViewModel之间采用ObservableField去监听UI上的逻辑，可在继承了Base的Activity或Fragment中重写initViewObservable()方法来初始化UI的监听。注册了监听，当然也要解除它。在BaseActivity、BaseFragment的onDestroy()方法里已经调用Messenger.getDefault().unregister(viewModel);解除注册，所以不用担心忘记解除导致的逻辑错误和内存泄漏。
@@ -134,7 +134,7 @@ token最好不要重名，不然可能就会出现逻辑上的bug，为了更好
 
 提供了一个RetrofitClient封装单例类, 实现网络请求，可以自己写一个
 
-'''java
+```java
 RetrofitClientDemo.getInstance().getService(DemoApiService.class)
  .login(name,password)
  .subscribeOn(Schedulers.io())
@@ -163,4 +163,4 @@ RetrofitClientDemo.getInstance().getService(DemoApiService.class)
  
  DownLoadManager 下载文件
  ApiDisposableObserver 请求响应错误处理例子
- '''
+```
