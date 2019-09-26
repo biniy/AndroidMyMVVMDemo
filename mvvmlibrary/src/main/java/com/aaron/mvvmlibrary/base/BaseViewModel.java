@@ -14,12 +14,17 @@ import java.util.Map;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
+/**
+ * 基础的ViewModel，继承AndroidViewModel
+ * 实现的功能：
+ * （1）提供显示对话框，取消对话框，Activity跳转，返回按钮事件，结束页面事件的LiveData，调用相关方法就可以
+ * （2）addSubscribe(Disposable disposable) 添加Disposable对象到CompositeDisposable，统一管理
+ */
 public class BaseViewModel extends AndroidViewModel {
     //管理RxJava，主要针对RxJava异步操作造成的内存泄漏
     private CompositeDisposable mCompositeDisposable;
-
     // 一些界面相关的观察者
-    private MutableLiveData<String> showDialogEvent;
+    private MutableLiveData<DialogData> showDialogEvent;
     private MutableLiveData<Void> dismissDialogEvent;
     private MutableLiveData<Map<String, Object>> startActivityEvent;
     private MutableLiveData<Map<String, Object>> startContainerActivityEvent;
@@ -31,7 +36,7 @@ public class BaseViewModel extends AndroidViewModel {
         mCompositeDisposable = new CompositeDisposable();
     }
 
-    public MutableLiveData<String> getShowDialogEvent() {
+    public MutableLiveData<DialogData> getShowDialogEvent() {
         if (showDialogEvent == null) {
             showDialogEvent = new MutableLiveData();
         }
@@ -73,6 +78,10 @@ public class BaseViewModel extends AndroidViewModel {
         return onBackPressedEvent;
     }
 
+    /**
+     * 添加Disposable对象到CompositeDisposable，统一管理
+     * @param disposable
+     */
     protected void addSubscribe(Disposable disposable) {
         if (mCompositeDisposable == null) {
             mCompositeDisposable = new CompositeDisposable();
@@ -87,23 +96,43 @@ public class BaseViewModel extends AndroidViewModel {
         if (mCompositeDisposable != null) {
             mCompositeDisposable.clear();
         }
+        removeRxBus();
     }
 
+    /**
+     * 注册RxBus,订阅事件
+     * 在Activity的onCreate方法中调用
+     */
     public void registerRxBus() {
+        // 订阅事件
     }
 
+    /**
+     * 移除RxBus订阅
+     */
     public void removeRxBus() {
 
     }
 
+    /**
+     * 进度对话框
+     */
     @MainThread
-    public void showDialog() {
-        showDialog("请稍后...");
+    public void showProgressDialog() {
+        showDialog("请稍后...",true);
     }
 
+    /**
+     * 带信息对话框
+     * @param title 展示的文字内容
+     * @param isProcessDialog 是否进度对话框
+     */
     @MainThread
-    public void showDialog(String title) {
-        showDialogEvent.postValue(title);
+    public void showDialog(String title,boolean isProcessDialog) {
+        DialogData dialogData = new DialogData();
+        dialogData.title = title;
+        dialogData.isProcessDialog = false;
+        showDialogEvent.postValue(dialogData);
     }
 
     @MainThread
@@ -173,9 +202,9 @@ public class BaseViewModel extends AndroidViewModel {
         onBackPressedEvent.postValue(null);
     }
 
-public static final class ParameterField {
-    public static String CLASS = "CLASS";
-    public static String CANONICAL_NAME = "CANONICAL_NAME";
-    public static String BUNDLE = "BUNDLE";
-}
+    public static final class ParameterField {
+        public static String CLASS = "CLASS";
+        public static String CANONICAL_NAME = "CANONICAL_NAME";
+        public static String BUNDLE = "BUNDLE";
+    }
 }

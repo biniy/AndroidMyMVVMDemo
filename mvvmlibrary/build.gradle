@@ -32,9 +32,9 @@ android {
             buildConfigField "boolean", "LOG_DEBUG", "false"
             versionNameSuffix '_Release'
             // Zipalign优化
-            zipAlignEnabled true
+            zipAlignEnabled false
             // 混淆
-            minifyEnabled true
+            minifyEnabled false
             // proguard-android.txt 默认不优化，而proguard-android-optimize.txt是优化的
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -70,6 +70,7 @@ dependencies {
     // rx实现的工具
     implementation 'com.jakewharton.rxbinding3:rxbinding:3.0.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
+    implementation 'com.aaron:AndroidNiceDialogLibrary:1.0.1'
 }
 
 /** 以下开始是将Android Library上传到jcenter的相关配置
@@ -83,13 +84,13 @@ dependencies {
  **/
 apply plugin: 'com.novoda.bintray-release'// 在apply plugin: 'com.android.library'之后
 //项目主页
-def siteUrl = 'https://github.com/StarsAaron/AndroidBaseMVVMLibrary'
+def siteUrl = 'https://github.com/StarsAaron/AndroidMyMVVMDemo'
 publish{
     userOrg = 'aaronstars'//bintray.com的用户名
     repoName = 'android-library'//远程仓库名字,不指明，默认是上传到maven
     groupId = 'com.aaron'//jcenter上的路径
     artifactId = 'AndroidBaseMVVMLibrary'//项目名称
-    publishVersion = '1.0.0'//版本号
+    publishVersion = '1.0.4'//版本号
     desc = 'For android MVVM base library'//描述，不重要
     website = siteUrl//项目主页
 }

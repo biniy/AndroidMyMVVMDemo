@@ -11,8 +11,7 @@ import com.aaron.mvvmlibrary.binding.command.BindingConsumer
 import com.aaron.mvvmlibrary.utils.ToastUtils
 
 
-class LoginViewModel(application: Application) :
-    BaseViewModel(application) {
+class LoginViewModel(application: Application) : BaseViewModel(application) {
     // 用户名的绑定
     var userName = MutableLiveData<String?>("")
     // 密码的绑定
@@ -55,8 +54,9 @@ class LoginViewModel(application: Application) :
             ToastUtils.showShort("请输入密码！")
             return@BindingAction
         }
-        showDialog("正在加载中...")
+        showDialog("正在加载中...",false)
 
+        
 //        startActivity(MainActivity::class.java)
     })
 }

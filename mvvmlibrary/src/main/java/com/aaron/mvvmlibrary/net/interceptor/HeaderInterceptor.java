@@ -1,6 +1,5 @@
 package com.aaron.mvvmlibrary.net.interceptor;
 
-import androidx.annotation.NonNull;
 
 import java.io.IOException;
 
@@ -9,18 +8,32 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 /**
- * 头部拦截器，所有请求都统一添加头部信息
+ * 添加请求头
+ *
+ * @author
+ * @version 1.0
+ * @date 3/8/2018
  */
+
 public class HeaderInterceptor implements Interceptor {
-    @NonNull
     @Override
-    public Response intercept(@NonNull Chain chain) throws IOException {
+    public Response intercept(Chain chain) throws IOException {
         Request originalRequest = chain.request();
-        Request.Builder requestBuilder = originalRequest.newBuilder()
-                .addHeader("Accept-Encoding", "gzip")
-                .addHeader("Accept", "application/json")
-                .addHeader("Content_Type", "application/json; charset=utf-8")
-                .method(originalRequest.method(), originalRequest.body());
-        return chain.proceed(requestBuilder.build());
+        Request.Builder builder = originalRequest.newBuilder();
+        builder.addHeader("version", "1");
+        builder.addHeader("time", System.currentTimeMillis() + "");
+
+        Request.Builder requestBuilder = builder.method(originalRequest.method(), originalRequest.body());
+        Request request = requestBuilder.build();
+        return chain.proceed(request);
     }
+//    @Override
+//    public Response intercept(Chain chain) throws IOException {
+//        Request original = chain.request();
+//        Request request = original.newBuilder()
+//                .addHeader("userData", "json")
+//                .method(original.method(), original.body())
+//                .build();
+//        return chain.proceed(request);
+//    }
 }

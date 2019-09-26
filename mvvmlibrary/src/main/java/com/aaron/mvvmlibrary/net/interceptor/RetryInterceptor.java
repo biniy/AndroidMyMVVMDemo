@@ -30,7 +30,7 @@ public class RetryInterceptor implements Interceptor {
         Request request = chain.request();
         Response response = chain.proceed(request);
         Log.i("Retry", "num:$retryNum");
-        while (!response.isSuccessful() && retryNum < maxRetry){
+        while (!response.isSuccessful() && retryNum < maxRetry) {
             retryNum++;
             Log.i("Retry", "num:$retryNum");
             response = chain.proceed(request);

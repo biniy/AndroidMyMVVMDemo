@@ -2,7 +2,7 @@ package com.aaron.mvvmlibrary.net.interceptor;
 
 import android.content.Context;
 
-import com.aaron.mvvmlibrary.utils.NetworkUtil;
+import com.aaron.mvvmlibrary.utils.android.NetworkUtils;
 
 import java.io.IOException;
 
@@ -25,7 +25,7 @@ public class CacheInterceptor implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();
-        if (NetworkUtil.isNetworkAvailable(context)) {
+        if (NetworkUtils.isNetworkAvailable(context)) {
             Response response = chain.proceed(request);
             // read from cache for 60 s
             int maxAge = 60;

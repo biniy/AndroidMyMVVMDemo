@@ -5,6 +5,7 @@ import io.reactivex.observers.DisposableObserver;
 /**
  * 下载监听器
  * 实际调用的是ProgressCallBack
+ *
  * @param <T>
  */
 public class DownLoadSubscriber<T> extends DisposableObserver<T> {

@@ -2,24 +2,28 @@ package com.aaron.mvvmlibrary.base;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProviders;
+
 import com.aaron.mvvmlibrary.bus.Messenger;
-import com.aaron.mvvmlibrary.nicedialog.NiceDialog;
+import com.aaron.nicedialoglibrary.NiceDialog;
+
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 /**
  * 支持DataBinding框架的基Activity
  * <p>
- * （1）自带Dialog，目前支持持showDialog(String title) dismissDialog()方法，只能设置标题文字
+ * （1）自带Dialog，目前支持持showDialog() dismissDialog()方法，只能设置标题文字
  * （2）可选择重写initParam()，initData()，initViewObservable()方法完成初始化
  * （3）监听viewmodel的显示对话框，取消对话框，Activity跳转，返回按钮事件，结束页面事件触发动作
- * （4）
+ * （4）提供Messenger，Rxbus统一管理
  */
 public abstract class BaseActivity<V extends ViewDataBinding, VM extends BaseViewModel> extends AppCompatActivity {
     protected V binding;
@@ -47,7 +51,7 @@ public abstract class BaseActivity<V extends ViewDataBinding, VM extends BaseVie
     //注册ViewModel与View的契约UI回调事件
     protected void registorUIChangeLiveDataCallBack() {
         //加载对话框显示
-        viewModel.getShowDialogEvent().observe(this, title -> showDialog(title));
+        viewModel.getShowDialogEvent().observe(this, dialogData -> showDialog(dialogData));
         //加载对话框消失
         viewModel.getDismissDialogEvent().observe(this, v -> dismissDialog());
         //跳入新页面
@@ -68,16 +72,18 @@ public abstract class BaseActivity<V extends ViewDataBinding, VM extends BaseVie
         viewModel.getOnBackPressedEvent().observe(this, v -> onBackPressed());
     }
 
-    public void showDialog(String title) {
-        dialog = NiceDialog.createProgressDialog(getSupportFragmentManager(), title);
-//        dialog = NiceDialog.createDialogWithConfirmButton(getSupportFragmentManager()
-//                , title, new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        dialog.dismiss();
-//                    }
-//                });
-//        dialog = NiceDialog.createDialogWithAllFunction(getSupportFragmentManager()
+    /**
+     * 展示信息对话框
+     * @param dialogData
+     */
+    public void showDialog(DialogData dialogData) {
+        if (dialogData.isProcessDialog) {
+            dialog = NiceDialog.createProgressDialog(this, getSupportFragmentManager(), dialogData.title);
+        } else {
+            dialog = NiceDialog.createDialogWithConfirmButton(this, getSupportFragmentManager()
+                    , dialogData.title, view -> dialog.dismiss());
+        }
+//        dialog = NiceDialog.createDialogWithAllFunction(this,getSupportFragmentManager()
 //                , title, "34343", new View.OnClickListener() {
 //                    @Override
 //                    public void onClick(View view) {
@@ -91,6 +97,9 @@ public abstract class BaseActivity<V extends ViewDataBinding, VM extends BaseVie
 //                });
     }
 
+    /**
+     * 取消信息对话框
+     */
     public void dismissDialog() {
         if (dialog != null) {
             dialog.dismiss();
@@ -146,18 +155,21 @@ public abstract class BaseActivity<V extends ViewDataBinding, VM extends BaseVie
 
     /**
      * 页面接受的参数方法
+     * 在Activity的onCreate方法中调用
      */
     public void initParam() {
     }
 
     /**
      * 页面数据初始化方法
+     * 在Activity的onCreate方法中调用
      */
     public void initData() {
     }
 
     /**
      * 页面事件监听的方法，一般用于ViewModel层转到View层的事件注册
+     * 在Activity的onCreate方法中调用
      */
     public void initViewObservable() {
     }
@@ -178,6 +190,8 @@ public abstract class BaseActivity<V extends ViewDataBinding, VM extends BaseVie
 
     /**
      * 注入绑定
+     *
+     * 在Activity的onCreate方法中调用
      */
     private void initViewDataBinding(Bundle savedInstanceState) {
         //DataBindingUtil类需要在project的build中配置 dataBinding {enabled true }, 同步后会自动关联android.databinding包
@@ -200,7 +214,9 @@ public abstract class BaseActivity<V extends ViewDataBinding, VM extends BaseVie
         binding.setVariable(viewModelId, viewModel);
     }
 
-    //刷新布局
+    /**
+     * 刷新布局
+     */
     public void refreshLayout() {
         if (viewModel != null) {
             binding.setVariable(viewModelId, viewModel);

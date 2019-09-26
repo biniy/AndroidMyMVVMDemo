@@ -18,7 +18,7 @@ import okhttp3.ResponseBody;
 /**
  * 进度回调
  */
-public abstract class ProgressCallBack<T>{
+public abstract class ProgressCallBack<T> {
 
     private String destFileDir; // 本地文件存放路径
     private String destFileName; // 文件名
@@ -40,8 +40,9 @@ public abstract class ProgressCallBack<T>{
     /**
      * 进度回调
      * 注意：在主线程中回调
+     *
      * @param progress 当前进度
-     * @param total 总下载量
+     * @param total    总下载量
      */
     public abstract void progress(long progress, long total);
 

@@ -1,10 +1,11 @@
 package com.aaron.mvvmlibrary.net;
 
-import com.aaron.mvvmlibrary.base.AppManager;
+import com.aaron.mvvmlibrary.exception.ResponseThrowable;
 import com.aaron.mvvmlibrary.utils.KLog;
-import com.aaron.mvvmlibrary.utils.NetworkUtil;
 import com.aaron.mvvmlibrary.utils.ToastUtils;
 import com.aaron.mvvmlibrary.utils.Utils;
+import com.aaron.mvvmlibrary.utils.android.ActivityUtils;
+import com.aaron.mvvmlibrary.utils.android.NetworkUtils;
 
 import io.reactivex.observers.DisposableObserver;
 
@@ -24,7 +25,7 @@ public abstract class ApiDisposableObserver<T> extends DisposableObserver<T> {
         e.printStackTrace();
         if (e instanceof ResponseThrowable) {
             ResponseThrowable rError = (ResponseThrowable) e;
-            ToastUtils.showShort(rError.message);
+            ToastUtils.showShort(rError.getMessage());
             return;
         }
         //其他全部甩锅网络异常
@@ -36,7 +37,7 @@ public abstract class ApiDisposableObserver<T> extends DisposableObserver<T> {
         super.onStart();
         ToastUtils.showShort("http is start");
         // if  NetworkAvailable no !   must to call onCompleted
-        if (!NetworkUtil.isNetworkAvailable(Utils.getContext())) {
+        if (!NetworkUtils.isNetworkAvailable(Utils.getContext())) {
             KLog.d("无网络，读取缓存数据");
             onComplete();
         }
@@ -79,7 +80,7 @@ public abstract class ApiDisposableObserver<T> extends DisposableObserver<T> {
                 //无效的Token，提示跳入登录页
                 ToastUtils.showShort("token已过期，请重新登录");
                 //关闭所有页面
-                AppManager.getAppManager().finishAllActivity();
+                ActivityUtils.removeAllActivity();
                 //跳入登录界面
                 //*****该类仅供参考，实际业务Code, 根据需求来定义，******//
                 break;

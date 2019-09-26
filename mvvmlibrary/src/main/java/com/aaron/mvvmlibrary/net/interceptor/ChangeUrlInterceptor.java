@@ -20,12 +20,9 @@ import okhttp3.Response;
  * 1.通过给接口添加注解，设置其请求头属性的值,例如：@Headers({“url_name:xxx”})
  *
  * @Headers({"url_name:weather"})
- * @GET("/data/sk/{cityId}.html")
- * Observable<ResponseBody> getWeatherByCityId(@Path("cityId") String cityId);
- *
+ * @GET("/data/sk/{cityId}.html") Observable<ResponseBody> getWeatherByCityId(@Path("cityId") String cityId);
  * @Headers({"url_name:book"})
- * @GET("/v2/book/search")
- * Observable<ResponseBody> getBook(@Query("q") String bookName);
+ * @GET("/v2/book/search") Observable<ResponseBody> getBook(@Query("q") String bookName);
  * <p>
  * 2.在ChangeUrlInterceptor中根据header的属性url_name的值修改请求地址
  * 3.在OkHttpClient.Builder中设置转换器，放在所有拦截器前面

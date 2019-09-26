@@ -40,7 +40,7 @@ public final class Utils {
     }
 
     public static int dp2px(float dipValue) {
-        if(context == null){
+        if (context == null) {
             throw new NullPointerException("上下文对象为初始化，请使用dp2px(Context context, float dipValue)方法");
         }
         final float scale = context.getResources().getDisplayMetrics().density;
@@ -48,7 +48,7 @@ public final class Utils {
     }
 
     public static int getScreenWidth() {
-        if(context == null){
+        if (context == null) {
             throw new NullPointerException("上下文对象为初始化，请使用getScreenWidth(Context context)方法");
         }
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();

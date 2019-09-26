@@ -1,6 +1,6 @@
 package com.aaron.mvvmlibrary.utils;
 
-import com.aaron.mvvmlibrary.utils.constant.RegexConstants;
+import com.aaron.mvvmlibrary.constant.RegexConstants;
 
 import java.util.ArrayList;
 import java.util.List;

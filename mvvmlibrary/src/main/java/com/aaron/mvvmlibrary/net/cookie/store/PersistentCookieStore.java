@@ -47,7 +47,8 @@ public class PersistentCookieStore implements CookieStore {
                     if (encodedCookie != null) {
                         Cookie decodedCookie = decodeCookie(encodedCookie);
                         if (decodedCookie != null) {
-                            if (!cookies.containsKey(entry.getKey())) cookies.put(entry.getKey(), new ConcurrentHashMap<String, Cookie>());
+                            if (!cookies.containsKey(entry.getKey()))
+                                cookies.put(entry.getKey(), new ConcurrentHashMap<String, Cookie>());
                             cookies.get(entry.getKey()).put(name, decodedCookie);
                         }
                     }
@@ -60,12 +61,16 @@ public class PersistentCookieStore implements CookieStore {
         return cookie.name() + "@" + cookie.domain();
     }
 
-    /** 当前cookie是否过期 */
+    /**
+     * 当前cookie是否过期
+     */
     private static boolean isCookieExpired(Cookie cookie) {
         return cookie.expiresAt() < System.currentTimeMillis();
     }
 
-    /** 根据当前url获取所有需要的cookie,只返回没有过期的cookie */
+    /**
+     * 根据当前url获取所有需要的cookie,只返回没有过期的cookie
+     */
     @Override
     public List<Cookie> loadCookie(HttpUrl url) {
         ArrayList<Cookie> ret = new ArrayList<>();
@@ -82,7 +87,9 @@ public class PersistentCookieStore implements CookieStore {
         return ret;
     }
 
-    /** 将url的所有Cookie保存在本地 */
+    /**
+     * 将url的所有Cookie保存在本地
+     */
     @Override
     public void saveCookie(HttpUrl url, List<Cookie> urlCookies) {
         if (!cookies.containsKey(url.host())) {
@@ -127,7 +134,9 @@ public class PersistentCookieStore implements CookieStore {
         prefsWriter.apply();
     }
 
-    /** 根据url移除当前的cookie */
+    /**
+     * 根据url移除当前的cookie
+     */
     @Override
     public boolean removeCookie(HttpUrl url, Cookie cookie) {
         String name = getCookieToken(cookie);
@@ -175,7 +184,9 @@ public class PersistentCookieStore implements CookieStore {
         return true;
     }
 
-    /** 获取所有的cookie */
+    /**
+     * 获取所有的cookie
+     */
     @Override
     public List<Cookie> getAllCookie() {
         List<Cookie> ret = new ArrayList<>();

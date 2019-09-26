@@ -7,10 +7,11 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 
 import com.aaron.mvvmlibrary.utils.Utils;
+import com.aaron.mvvmlibrary.utils.android.ActivityUtils;
 
 /**
  * 基础功能封装初始化
- *
+ * <p>
  * （1）管理activity生命周期
  * （2）初始化工具类，实质是初始化工具类要用到的上下文Context
  */
@@ -37,7 +38,7 @@ public class BaseApplication extends Application {
 
             @Override
             public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-                AppManager.getAppManager().addActivity(activity);
+                ActivityUtils.addActivity(activity);
             }
 
             @Override
@@ -62,7 +63,7 @@ public class BaseApplication extends Application {
 
             @Override
             public void onActivityDestroyed(Activity activity) {
-                AppManager.getAppManager().removeActivity(activity);
+                ActivityUtils.removeActivity(activity);
             }
         });
 

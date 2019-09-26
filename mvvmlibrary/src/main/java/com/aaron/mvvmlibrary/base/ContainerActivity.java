@@ -16,24 +16,24 @@ import java.lang.ref.WeakReference;
 /**
  * 盛装Fragment的一个容器(代理)Activity
  * 普通界面只需要编写Fragment,使用此Activity盛装,这样就不需要每个界面都在AndroidManifest中注册一遍
- *
+ * <p>
  * 使用方法：
- *
+ * <p>
  * 在ViewModel中调用BaseViewModel的方法开一个Fragment
- *
+ * <p>
  * startContainerActivity(你的Fragment类名.class.getCanonicalName())
- *
+ * <p>
  * 在ViewModel中调用BaseViewModel的方法，携带一个序列化实体打开一个Fragment
- *
+ * <p>
  * Bundle mBundle = new Bundle();
  * mBundle.putParcelable("entity", entity);
  * startContainerActivity(你的Fragment类名.class.getCanonicalName(), mBundle);
- *
+ * <p>
  * 在你的Fragment中取出实体
- *
+ * <p>
  * Bundle mBundle = getArguments();
  * if (mBundle != null) {
- *     entity = mBundle.getParcelable("entity");
+ * entity = mBundle.getParcelable("entity");
  * }
  */
 public class ContainerActivity extends AppCompatActivity {

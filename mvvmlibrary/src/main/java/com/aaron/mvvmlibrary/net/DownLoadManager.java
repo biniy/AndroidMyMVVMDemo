@@ -3,7 +3,6 @@ package com.aaron.mvvmlibrary.net;
 import com.aaron.mvvmlibrary.net.download.DownLoadSubscriber;
 import com.aaron.mvvmlibrary.net.download.ProgressCallBack;
 import com.aaron.mvvmlibrary.net.download.ProgressInterceptor;
-import com.aaron.mvvmlibrary.utils.NetworkUtil;
 
 import java.util.concurrent.TimeUnit;
 
@@ -23,7 +22,7 @@ import retrofit2.http.Url;
  * 文件下载管理，封装一行代码实现下载
  * 注意：带下载进度回调，进度回调运行在主线程，输出在io进程
  * 进度信息是使用自定义RxBus进行传递的
- *
+ * <p>
  * 使用方式：
  * DownLoadManager.getInstance().load("下载地址",ProgressCallBack回调)
  */
@@ -33,7 +32,6 @@ public class DownLoadManager {
     private static Retrofit retrofit;
 
     private DownLoadManager() {
-        buildNetWork();
     }
 
     /**
@@ -50,10 +48,20 @@ public class DownLoadManager {
 
     /**
      * 下载
-     * @param downUrl 下载地址
+     *
+     * @param downUrl  下载地址
      * @param callBack 进度回调
      */
     public void load(String downUrl, final ProgressCallBack callBack) {
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .addInterceptor(new ProgressInterceptor())
+                .connectTimeout(20, TimeUnit.SECONDS)
+                .build();
+        retrofit = new Retrofit.Builder()
+                .client(okHttpClient)
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .baseUrl(downUrl)
+                .build();
         retrofit.create(ApiService.class)
                 .download(downUrl)
                 .subscribeOn(Schedulers.io())//请求网络 在调度者的io线程
@@ -66,19 +74,6 @@ public class DownLoadManager {
                 })
                 .observeOn(AndroidSchedulers.mainThread()) //在主线程中更新ui
                 .subscribe(new DownLoadSubscriber<ResponseBody>(callBack));
-    }
-
-    private void buildNetWork() {
-        OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .addInterceptor(new ProgressInterceptor())
-                .connectTimeout(20, TimeUnit.SECONDS)
-                .build();
-
-        retrofit = new Retrofit.Builder()
-                .client(okHttpClient)
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .baseUrl(NetworkUtil.url)
-                .build();
     }
 
     private interface ApiService {

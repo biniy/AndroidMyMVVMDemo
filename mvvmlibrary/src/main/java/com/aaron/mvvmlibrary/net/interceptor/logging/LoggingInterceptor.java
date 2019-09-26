@@ -20,19 +20,19 @@ import okhttp3.internal.platform.Platform;
 /**
  * 请求日志拦截器
  * 用于调试输出日志信息，正式环境不输出
- *
+ * <p>
  * Builder类构建配置信息
- *
+ * <p>
  * 使用：
  * .addInterceptor(new LoggingInterceptor
- *         .Builder()//构建者模式
- *         .loggable(BuildConfig.DEBUG) //是否开启日志打印
- *         .setLevel(Level.BASIC) //打印的等级
- *         .log(Platform.INFO) // 打印类型
- *         .request("Request") // request的Tag
- *         .response("Response")// Response的Tag
- *         .addHeader("log-header", "I am the log request header.") // 添加打印头, 注意 key 和 value 都不能是中文
- *         .build()
+ * .Builder()//构建者模式
+ * .loggable(BuildConfig.DEBUG) //是否开启日志打印
+ * .setLevel(Level.BASIC) //打印的等级
+ * .log(Platform.INFO) // 打印类型
+ * .request("Request") // request的Tag
+ * .response("Response")// Response的Tag
+ * .addHeader("log-header", "I am the log request header.") // 添加打印头, 注意 key 和 value 都不能是中文
+ * .build()
  * ) // 日志拦截器
  */
 public class LoggingInterceptor implements Interceptor {

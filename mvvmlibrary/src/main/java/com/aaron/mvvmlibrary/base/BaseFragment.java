@@ -13,11 +13,19 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.aaron.mvvmlibrary.nicedialog.NiceDialog;
+import com.aaron.nicedialoglibrary.NiceDialog;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
+/**
+ * 基础Fragment
+ *
+ * 用法跟BaseActivity相同
+ *
+ * @param <V>
+ * @param <VM>
+ */
 public abstract class BaseFragment<V extends ViewDataBinding, VM extends BaseViewModel>
         extends Fragment {
     protected V binding;
@@ -66,6 +74,8 @@ public abstract class BaseFragment<V extends ViewDataBinding, VM extends BaseVie
 
     /**
      * 注入绑定
+     *
+     * 默认
      */
     private void initViewDataBinding() {
         viewModelId = initVariableId();
@@ -87,7 +97,7 @@ public abstract class BaseFragment<V extends ViewDataBinding, VM extends BaseVie
     //注册ViewModel与View的契约UI回调事件
     protected void registorUIChangeLiveDataCallBack() {
         //加载对话框显示
-        viewModel.getShowDialogEvent().observe(this, title -> showDialog(title));
+        viewModel.getShowDialogEvent().observe(this, dialogData -> showDialog(dialogData));
         //加载对话框消失
         viewModel.getDismissDialogEvent().observe(this, v -> dismissDialog());
         //跳入新页面
@@ -108,8 +118,25 @@ public abstract class BaseFragment<V extends ViewDataBinding, VM extends BaseVie
         viewModel.getOnBackPressedEvent().observe(this, v -> getActivity().onBackPressed());
     }
 
-    public void showDialog(String title) {
-        dialog = NiceDialog.createProgressDialog(getActivity().getSupportFragmentManager(), title);
+    public void showDialog(DialogData dialogData) {
+        if (dialogData.isProcessDialog) {
+            dialog = NiceDialog.createProgressDialog(getContext(), getActivity().getSupportFragmentManager(), dialogData.title);
+        } else {
+            dialog = NiceDialog.createDialogWithConfirmButton(getContext(), getActivity().getSupportFragmentManager()
+                    , dialogData.title, view -> dialog.dismiss());
+        }
+//        dialog = NiceDialog.createDialogWithAllFunction(this,getSupportFragmentManager()
+//                , title, "34343", new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        ToastUtils.showShort("点击了取消");
+//                    }
+//                }, new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        ToastUtils.showShort("点击了ok");
+//                    }
+//                });
     }
 
     public void dismissDialog() {

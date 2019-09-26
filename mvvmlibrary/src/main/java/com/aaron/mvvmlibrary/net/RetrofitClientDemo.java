@@ -28,10 +28,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * RetrofitClient封装单例类, 实现网络请求
  * <p>
  * RetrofitClientDemo.getInstance().getService(DemoApiService.class)
- *  .login(name,password)
- *  .subscribeOn(Schedulers.io())
- *  .observeOn(AndroidSchedulers.mainThread())
- *  .subscribe(subscriber);
+ * .login(name,password)
+ * .subscribeOn(Schedulers.io())
+ * .observeOn(AndroidSchedulers.mainThread())
+ * .subscribe(subscriber);
  */
 public class RetrofitClientDemo {
     //超时时间
@@ -59,14 +59,16 @@ public class RetrofitClientDemo {
 
     /**
      * 修改默认URL地址
+     *
      * @param urlstr
      */
-    private void initBaseUrl(String urlstr){
+    private void initBaseUrl(String urlstr) {
         this.baseUrl = urlstr;
     }
 
     /**
      * 创建Retrofit实例对象
+     *
      * @param url 链接地址
      * @return
      */
@@ -150,8 +152,9 @@ public class RetrofitClientDemo {
 
     /**
      * 获取API接口实例
+     *
      * @param clazz API 实例类
-     * @param <T> API 接口类类型
+     * @param <T>   API 接口类类型
      * @return
      */
     public <T> T getService(Class<T> clazz) {
@@ -160,9 +163,10 @@ public class RetrofitClientDemo {
 
     /**
      * 获取API接口实例
+     *
      * @param clazz API 实例类
-     * @param host 链接地址
-     * @param <T> API 接口类类型
+     * @param host  链接地址
+     * @param <T>   API 接口类类型
      * @return
      */
     public <T> T getService(Class<T> clazz, String host) {

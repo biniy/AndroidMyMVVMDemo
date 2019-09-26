@@ -1,4 +1,5 @@
 package com.aaron.mvvmlibrary.utils;
+
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
@@ -25,12 +26,12 @@ public final class ToastUtils {
 
     private static final int DEFAULT_COLOR = 0x12000000;
     private static Toast sToast;
-    private static int gravity         = Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM;
-    private static int xOffset         = 0;
-    private static int yOffset         = (int) (64 * Utils.getContext().getResources().getDisplayMetrics().density + 0.5);
+    private static int gravity = Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM;
+    private static int xOffset = 0;
+    private static int yOffset = (int) (64 * Utils.getContext().getResources().getDisplayMetrics().density + 0.5);
     private static int backgroundColor = DEFAULT_COLOR;
-    private static int bgResource      = -1;
-    private static int messageColor    = DEFAULT_COLOR;
+    private static int bgResource = -1;
+    private static int messageColor = DEFAULT_COLOR;
     private static WeakReference<View> sViewWeakReference;
     private static Handler sHandler = new Handler(Looper.getMainLooper());
 
