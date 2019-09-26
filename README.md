@@ -2,7 +2,7 @@
 使用databinding livedata双向绑定的MVVM模式的通用开发库
 
 ## 引入依赖：
-`${latest.version}` is [![V1.0.2]](https://dl.bintray.com/aaronstars/android-library/AndroidBaseMVVMLibrary)
+`${latest.version}` is [[V1.0.0]](https://dl.bintray.com/aaronstars/android-library/AndroidBaseMVVMLibrary)
 
 ```groovy
 dependencies {
